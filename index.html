@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Xue Ting Studio | Interior Design</title>
+  <meta name="description" content="Thoughtful spaces shaped by material, light, and quiet intention.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #FDFCFA;
+      --surface: #F5F3F0;
+      --bone: #EAE7E3;
+      --stone: #C8C3BD;
+      --graphite: #4A4643;
+      --charcoal: #2C2926;
+      --ink: #1A1816;
+      --accent: #7B8C8E;
+      --text-muted: #8A8580;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Inter', system-ui, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--graphite);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    ::selection { background: var(--accent); color: #fff; }
+    img { display: block; max-width: 100%; }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .hero-title, .hero-sub, .hero-eyebrow {
+      opacity: 0;
+      animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .hero-eyebrow { animation-delay: 0.2s; }
+    .hero-title { animation-delay: 0.4s; }
+    .hero-sub { animation-delay: 0.6s; }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* ===== HEADER ===== */
+    .header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+      transition: background 0.5s, backdrop-filter 0.5s, height 0.5s;
+      height: 4rem;
+    }
+    .header.scrolled {
+      background: rgba(253, 252, 250, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .header-logo {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #fff;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: color 0.5s;
+    }
+    .header.scrolled .header-logo { color: var(--ink); }
+
+    .header-nav {
+      display: none;
+      gap: 2.5rem;
+    }
+    .header-nav a {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .header-nav a:hover { color: #fff; }
+    .header.scrolled .header-nav a { color: var(--graphite); }
+    .header.scrolled .header-nav a:hover { color: var(--ink); }
+
+    @media (min-width: 768px) {
+      .header { padding: 1.5rem 3rem; height: 5rem; }
+      .header-nav { display: flex; }
+      .hamburger { display: none !important; }
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      z-index: 60;
+    }
+    .hamburger span {
+      display: block;
+      width: 20px;
+      height: 1.5px;
+      background: #fff;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .header.scrolled .hamburger span { background: var(--ink); }
+    .hamburger.open span:first-child { transform: rotate(45deg) translate(4px, 4px); }
+    .hamburger.open span:last-child { transform: rotate(-45deg) translate(4px, -4px); }
+
+    /* Mobile menu */
+    .mobile-menu {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      background: rgba(26, 24, 22, 0.92);
+      backdrop-filter: blur(8px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .mobile-menu.open { opacity: 1; pointer-events: all; }
+    .mobile-menu a {
+      font-family: var(--font-serif);
+      font-size: 1.75rem;
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .mobile-menu a:hover { color: #fff; }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      height: 100dvh;
+      width: 100%;
+      overflow: hidden;
+    }
+    .hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .hero-mask {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(to bottom, var(--bg) 0%, transparent 18%),
+        linear-gradient(to top, var(--bg) 0%, transparent 22%),
+        linear-gradient(to right, var(--bg) 0%, transparent 15%),
+        linear-gradient(to left, var(--bg) 0%, transparent 15%),
+        radial-gradient(ellipse at center, transparent 40%, var(--bg) 100%);
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.25);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+      padding: 0 1rem;
+    }
+    .hero-eyebrow {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 1rem;
+    }
+    .hero-title {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: clamp(2.4rem, 8vw, 9.5rem);
+      line-height: 0.88;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+    .hero-title span { display: block; }
+    .hero-sub {
+      margin-top: 1.5rem;
+      max-width: 20rem;
+      font-size: 0.75rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.65);
+    }
+    @media (min-width: 640px) {
+      .hero-sub { max-width: 28rem; font-size: 0.875rem; }
+    }
+
+    /* ===== SECTIONS ===== */
+    section { padding: 4rem 1rem; }
+    @media (min-width: 640px) { section { padding: 7rem 1.5rem; } }
+    @media (min-width: 1024px) { section { padding: 9rem 4rem; } }
+
+    .container { max-width: 72rem; margin: 0 auto; }
+
+    /* Eyebrow label */
+    .eyebrow {
+      display: block;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+    }
+
+    /* Section heading */
+    .section-heading {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      color: var(--charcoal);
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      font-size: clamp(1.8rem, 3.5vw, 3.2rem);
+      margin-bottom: 2rem;
+    }
+
+    /* ===== PHILOSOPHY ===== */
+    #about { background: var(--bg); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+    @media (min-width: 768px) {
+      .about-grid {
+        grid-template-columns: 5fr 6fr;
+        gap: 4rem;
+      }
+      .about-text { grid-column: 2; }
+    }
+    .about-img {
+      position: relative;
+      aspect-ratio: 3/4;
+      overflow: hidden;
+    }
+    .about-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .about-text p {
+      font-size: 0.875rem;
+      line-height: 1.8;
+      color: var(--graphite);
+      max-width: 50ch;
+    }
+    @media (min-width: 768px) {
+      .about-text p { font-size: 1rem; }
+    }
+
+    /* ===== SELECTED WORK ===== */
+    #work { background: var(--surface); }
+    .work-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+    @media (min-width: 768px) {
+      .work-grid {
+        grid-template-columns: repeat(12, 1fr);
+        gap: 2rem;
+        row-gap: 4rem;
+      }
+    }
+    .work-item { cursor: pointer; }
+    .work-item-img {
+      overflow: hidden;
+    }
+    .work-item-img img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .work-item:hover .work-item-img img { transform: scale(1.04); }
+    .work-item h3 {
+      font-family: var(--font-serif);
+      font-size: 1.125rem;
+      font-weight: 500;
+      color: var(--charcoal);
+      margin-top: 1rem;
+    }
+    @media (min-width: 768px) {
+      .work-item h3 { font-size: 1.25rem; }
+    }
+    .work-item p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 0.03em;
+      margin-top: 0.25rem;
+    }
+
+    /* Grid spans (desktop only) */
+    @media (min-width: 768px) {
+      .span-7 { grid-column: span 7; }
+      .span-4 { grid-column: span 4; }
+      .span-4-start9 { grid-column: 9 / span 4; }
+      .span-8 { grid-column: span 8; }
+      .span-4-start1 { grid-column: 1 / span 4; }
+      .span-7-start5 { grid-column: 5 / span 7; }
+    }
+
+    /* ===== SERVICES ===== */
+    #services { background: var(--bg); }
+    .services-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+    @media (min-width: 768px) {
+      .services-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4rem;
+      }
+    }
+    .service-item {
+      border-top: 1px solid var(--stone);
+      padding-top: 2rem;
+    }
+    .service-item h3 {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--charcoal);
+    }
+    @media (min-width: 768px) {
+      .service-item h3 { font-size: 1.5rem; }
+    }
+    .service-item p {
+      margin-top: 1rem;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+      max-width: 40ch;
+    }
+
+    /* ===== CONTACT ===== */
+    #contact {
+      background: var(--bg);
+      text-align: center;
+      padding: 5rem 1rem;
+    }
+    @media (min-width: 640px) { #contact { padding: 8rem 1.5rem; } }
+    @media (min-width: 1024px) { #contact { padding: 11rem 4rem; } }
+    #contact h2 {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      font-size: clamp(2rem, 5vw, 5rem);
+    }
+    #contact a {
+      display: inline-block;
+      margin-top: 2rem;
+      border-bottom: 1px solid var(--charcoal);
+      padding-bottom: 2px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--charcoal);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    #contact a:hover { color: var(--accent); }
+    @media (min-width: 768px) {
+      #contact a { font-size: 0.875rem; margin-top: 2.5rem; }
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      padding: 2rem 1rem;
+      border-top: 1px solid var(--stone);
+    }
+    @media (min-width: 640px) {
+      .footer { padding: 2.5rem 1.5rem; }
+    }
+    @media (min-width: 768px) {
+      .footer {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 3rem 4rem;
+      }
+    }
+    .footer span, .footer a {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+    }
+    .footer-links { display: flex; gap: 2rem; }
+    .footer a {
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      transition: color 0.3s;
+    }
+    .footer a:hover { color: var(--charcoal); }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <a href="#" class="header-logo">Xue Ting</a>
+    <nav class="header-nav">
+      <a href="#about">About</a>
+      <a href="#work">Work</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about">About</a>
+    <a href="#work">Work</a>
+    <a href="#services">Services</a>
+    <a href="#contact">Contact</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <video class="hero-video" autoplay loop muted playsinline poster="https://picsum.photos/seed/xue-ting-hero/1920/1080">
+      <source src="hero-video.mp4" type="video/mp4">
+    </video>
+    <div class="hero-mask"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <span class="hero-eyebrow">Interior Design Studio</span>
+      <h1 class="hero-title"><span>Xue</span><span>Ting</span></h1>
+      <p class="hero-sub">Thoughtful spaces shaped by material, light, and quiet intention.</p>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container about-grid">
+      <div class="about-img reveal">
+        <img src="https://picsum.photos/seed/xue-ting-about/600/800" alt="Xue Ting in her studio" loading="lazy">
+      </div>
+      <div class="about-text reveal reveal-delay-1">
+        <span class="eyebrow">About</span>
+        <h2 class="section-heading">Design as Quiet Practice</h2>
+        <p>With years of experience shaping retail environments for Xiaomi, Xue Ting brings a disciplined eye for materiality and spatial flow. Her practice strips away the unnecessary, letting light and proportion do the work. Every project begins with listening, not sketching.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SELECTED WORK -->
+  <section id="work">
+    <div class="container">
+      <h2 class="section-heading reveal">Selected Work</h2>
+      <div class="work-grid">
+        <div class="work-item span-7 reveal">
+          <div class="work-item-img"><img src="https://picsum.photos/seed/courtyard-res/900/600" alt="The Courtyard Residence" loading="lazy"></div>
+          <h3>The Courtyard Residence</h3>
+          <p>Residential, Beijing, 2025</p>
+        </div>
+        <div class="work-item span-4-start9 reveal reveal-delay-1">
+          <div class="work-item-img"><img src="https://picsum.photos/seed/xiaomi-store/600/800" alt="Xiaomi Flagship Store" loading="lazy"></div>
+          <h3>Xiaomi Flagship Store</h3>
+          <p>Retail, Shenzhen, 2024</p>
+        </div>
+        <div class="work-item span-8 reveal">
+          <div class="work-item-img"><img src="https://picsum.photos/seed/lakeside-ret/800/550" alt="Lakeside Retreat" loading="lazy"></div>
+          <h3>Lakeside Retreat</h3>
+          <p>Hospitality, Hangzhou, 2024</p>
+        </div>
+        <div class="work-item span-4-start1 reveal reveal-delay-1">
+          <div class="work-item-img"><img src="https://picsum.photos/seed/office-min/550/750" alt="Minimalist Office" loading="lazy"></div>
+          <h3>Minimalist Office</h3>
+          <p>Commercial, Shanghai, 2023</p>
+        </div>
+        <div class="work-item span-7-start5 reveal reveal-delay-2">
+          <div class="work-item-img"><img src="https://picsum.photos/seed/tea-house/700/500" alt="Tea House Interiors" loading="lazy"></div>
+          <h3>Tea House Interiors</h3>
+          <p>Hospitality, Chengdu, 2023</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="container">
+      <div class="services-grid">
+        <div class="service-item reveal">
+          <h3>Retail Design</h3>
+          <p>Immersive retail environments that balance brand narrative with customer experience.</p>
+        </div>
+        <div class="service-item reveal reveal-delay-1">
+          <h3>Residential Interiors</h3>
+          <p>Homes crafted around the rhythms of daily life. Material honesty over decoration.</p>
+        </div>
+        <div class="service-item reveal reveal-delay-2">
+          <h3>Spatial Consultation</h3>
+          <p>Strategic input on layout, material palette, and light for projects in progress.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <h2 class="reveal">Start a Conversation</h2>
+    <a href="mailto:studio@xueting.design" class="reveal reveal-delay-1">studio@xueting.design</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <span>&copy; 2026 Xue Ting Studio</span>
+    <div class="footer-links">
+      <a href="#">Instagram</a>
+      <a href="#">WeChat</a>
+    </div>
+  </footer>
+
+  <script>
+    // Header scroll effect
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 80);
+    }, { passive: true });
+
+    // Hamburger menu
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+    mobileMenu.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+      });
+    });
+
+    // Scroll reveal with IntersectionObserver
+    const revealElements = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealElements.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
