@@ -56,8 +56,8 @@ export default function Philosophy() {
   }, [reduce]);
 
   return (
-    <section id="about" className="bg-bg py-28 md:py-36 px-6 md:px-16 lg:px-24">
-      <div className="mx-auto max-w-[1200px] grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16 items-center">
+    <section id="about" className="bg-bg py-16 sm:py-28 md:py-36 px-4 sm:px-6 md:px-16 lg:px-24">
+      <div className="mx-auto max-w-[1200px] grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 items-center">
         {/* Image: left */}
         <div ref={imgRef} className="md:col-span-5">
           <div className="relative aspect-[3/4] overflow-hidden">

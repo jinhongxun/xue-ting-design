@@ -36,7 +36,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="bg-bg py-32 md:py-44 px-6 md:px-16 lg:px-24 text-center"
+      className="bg-bg py-20 sm:py-32 md:py-44 px-4 sm:px-6 md:px-16 lg:px-24 text-center"
     >
       <div ref={ref}>
         <h2

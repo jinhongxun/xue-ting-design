@@ -1,24 +1,9 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 import { HERO_SUBTITLE } from "@/lib/constants";
 
 export default function Hero() {
-  const reduce = useReducedMotion();
-
-  const line = {
-    hidden: reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 },
-    visible: (i: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.9,
-        delay: i * 0.15,
-        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
-      },
-    }),
-  };
-
   return (
     <section className="relative h-[100dvh] w-full overflow-hidden">
       {/* Video background */}
@@ -33,7 +18,7 @@ export default function Hero() {
         <source src="/hero-video.mp4" type="video/mp4" />
       </video>
 
-      {/* Inward gradient mask: fades edges into page background color */}
+      {/* Inward gradient mask */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -47,39 +32,36 @@ export default function Hero() {
         }}
       />
 
-      {/* Subtle dark overlay for text legibility */}
+      {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/25" />
 
       {/* Content: centered */}
-      <div className="relative z-10 flex h-full flex-col items-center justify-center text-center px-6">
+      <div className="relative z-10 flex h-full flex-col items-center justify-center text-center px-4 sm:px-6">
         <motion.span
-          custom={0}
-          initial="hidden"
-          animate="visible"
-          variants={line}
-          className="mb-6 text-[10px] md:text-xs uppercase tracking-[0.2em] text-white/70 font-sans"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+          className="mb-4 sm:mb-6 text-[10px] sm:text-xs uppercase tracking-[0.2em] text-white/70 font-sans"
         >
           Interior Design Studio
         </motion.span>
 
         <motion.h1
-          custom={1}
-          initial="hidden"
-          animate="visible"
-          variants={line}
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.4, ease: "easeOut" }}
           className="font-serif font-semibold leading-[0.88] text-white tracking-[-0.02em]"
-          style={{ fontSize: "clamp(3.2rem, 8vw, 9.5rem)" }}
+          style={{ fontSize: "clamp(2.4rem, 8vw, 9.5rem)" }}
         >
           <span className="block">Xue</span>
           <span className="block">Ting</span>
         </motion.h1>
 
         <motion.p
-          custom={2}
-          initial="hidden"
-          animate="visible"
-          variants={line}
-          className="mt-8 max-w-md text-sm md:text-base leading-relaxed text-white/65 font-sans"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
+          className="mt-6 sm:mt-8 max-w-xs sm:max-w-md text-xs sm:text-sm md:text-base leading-relaxed text-white/65 font-sans"
         >
           {HERO_SUBTITLE}
         </motion.p>

@@ -56,7 +56,7 @@ export default function SelectedWork() {
   }, []);
 
   return (
-    <section id="work" ref={sectionRef} className="bg-surface py-28 md:py-36 px-6 md:px-16 lg:px-24">
+    <section id="work" ref={sectionRef} className="bg-surface py-16 sm:py-28 md:py-36 px-4 sm:px-6 md:px-16 lg:px-24">
       <div className="mx-auto max-w-[1200px]">
         <h2
           ref={headingRef}

@@ -36,7 +36,7 @@ export default function Services() {
   }, []);
 
   return (
-    <section id="services" ref={ref} className="bg-bg py-28 md:py-36 px-6 md:px-16 lg:px-24">
+    <section id="services" ref={ref} className="bg-bg py-16 sm:py-28 md:py-36 px-4 sm:px-6 md:px-16 lg:px-24">
       <div className="mx-auto max-w-[1200px]">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16">
           {SERVICES.map((service) => (
