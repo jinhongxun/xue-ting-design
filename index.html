@@ -184,6 +184,14 @@
       height: 100%;
       object-fit: cover;
     }
+
+    /* WeChat X5 kernel compatibility */
+    video::-webkit-media-controls {
+      display: none !important;
+    }
+    video::-webkit-media-controls-enclosure {
+      display: none !important;
+    }
     .hero-mask {
       position: absolute;
       inset: 0;
@@ -480,7 +488,13 @@
 
   <!-- HERO -->
   <section class="hero">
-    <video class="hero-video" autoplay loop muted playsinline poster="https://picsum.photos/seed/xue-ting-hero/1920/1080">
+    <video class="hero-video" autoplay loop muted playsinline
+           x5-video-player-type="h5"
+           x5-video-player-fullscreen="true"
+           x5-video-orientation="portraint"
+           webkit-playsinline
+           playsinline
+           poster="https://picsum.photos/seed/xue-ting-hero/1920/1080">
       <source src="hero-video.mp4" type="video/mp4">
     </video>
     <div class="hero-mask"></div>
@@ -576,6 +590,25 @@
   </footer>
 
   <script>
+    // WeChat browser video compatibility
+    const heroVideo = document.querySelector('.hero-video');
+    if (heroVideo) {
+      // Try to play video (handles WeChat autoplay restriction)
+      const playVideo = () => {
+        heroVideo.play().catch(() => {
+          // Autoplay blocked, wait for user interaction
+        });
+      };
+
+      // WeChat requires user interaction to play video
+      if (/MicroMessenger/i.test(navigator.userAgent)) {
+        document.addEventListener('touchstart', playVideo, { once: true });
+        document.addEventListener('click', playVideo, { once: true });
+      } else {
+        playVideo();
+      }
+    }
+
     // Header scroll effect
     const header = document.getElementById('header');
     window.addEventListener('scroll', () => {
