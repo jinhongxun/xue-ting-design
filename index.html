@@ -41,44 +41,33 @@
       from { opacity: 0; transform: translateY(30px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
 
-    .hero-title, .hero-sub, .hero-eyebrow {
-      opacity: 0;
-      animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-    .hero-eyebrow { animation-delay: 0.2s; }
-    .hero-title { animation-delay: 0.4s; }
-    .hero-sub { animation-delay: 0.6s; }
+    /* Default: everything visible (safe fallback) */
+    .hero-title, .hero-sub, .hero-eyebrow { opacity: 1; }
+    .reveal { opacity: 1; transform: none; }
 
-    /* Scroll reveal */
-    .reveal {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .reveal-delay-1 { transition-delay: 0.1s; }
-    .reveal-delay-2 { transition-delay: 0.2s; }
-    .reveal-delay-3 { transition-delay: 0.3s; }
-
-    /* Respect reduced motion but still show content */
-    @media (prefers-reduced-motion: reduce) {
+    /* Only animate when user hasn't opted out */
+    @media (prefers-reduced-motion: no-preference) {
       .hero-title, .hero-sub, .hero-eyebrow {
-        animation: none;
-        opacity: 1;
+        opacity: 0;
+        animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       }
+      .hero-eyebrow { animation-delay: 0.2s; }
+      .hero-title { animation-delay: 0.4s; }
+      .hero-sub { animation-delay: 0.6s; }
+
       .reveal {
-        transition: none;
-        opacity: 1;
-        transform: none;
+        opacity: 0;
+        transform: translateY(40px);
+        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
       }
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .reveal-delay-1 { transition-delay: 0.1s; }
+      .reveal-delay-2 { transition-delay: 0.2s; }
+      .reveal-delay-3 { transition-delay: 0.3s; }
     }
 
     /* ===== HEADER ===== */
