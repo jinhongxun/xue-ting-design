@@ -526,7 +526,7 @@
 
   <!-- HERO -->
   <section class="hero">
-    <video class="hero-video" loop muted playsinline
+    <video class="hero-video" loop playsinline
            x5-video-player-type="h5"
            x5-video-player-fullscreen="true"
            x5-video-orientation="portraint"
@@ -642,6 +642,7 @@
 
     if (heroVideo && playBtn) {
       playBtn.addEventListener('click', () => {
+        heroVideo.muted = false;
         heroVideo.play().then(() => {
           playBtn.classList.add('hidden');
           document.body.classList.remove('scroll-locked');
